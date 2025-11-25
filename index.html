@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I-TECH Apparel</title>
+    
+    <!-- 1. Load Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- 2. Load Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- 3. TRADITIONAL CSS -->
+    <style>
+        /* --- CSS VARIABLES (Easy to change colors here) --- */
+        :root {
+            --bg-main: #f2f0ea;
+            --bg-glass: rgba(242, 240, 234, 0.95);
+            --txt-main: #0a0a0a;
+            --txt-sub: #888888;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--txt-main);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.25rem 1.5rem;
+            background-color: var(--bg-glass);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 80rem; /* roughly 1280px */
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 8.5rem; /* 40px */
+            width: 8.5rem;
+            display: block;
+            transition: opacity 0.2s;
+            margin-bottom: -2rem;
+            margin-top: -2rem;
+        }
+        .logo-img:hover {
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: none; /* Hidden on mobile */
+            gap: 2.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+        }
+
+        .nav-link {
+            transition: color 0.2s;
+        }
+        .nav-link:hover {
+            color: var(--txt-sub);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .icon-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+        }
+        .icon-btn:hover {
+            opacity: 0.6;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--txt-main);
+            border-radius: 50%;
+        }
+
+        /* --- MOBILE MENU --- */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg-main);
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            /* Animation State: Closed */
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Class added by JS to open menu */
+        .mobile-menu.open {
+            transform: translateY(0);
+        }
+
+        .mobile-link {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            transition: color 0.2s;
+        }
+        .mobile-link:hover {
+            color: var(--txt-sub);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 5rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .hero-grid {
+            max-width: 80rem;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--txt-sub);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+        }
+        .hero-title span {
+            font-family: serif;
+            font-style: italic;
+            color: var(--txt-sub);
+            font-weight: 400;
+        }
+
+        .hero-desc {
+            max-width: 28rem;
+            color: #4b5563;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--txt-main);
+            color: var(--bg-main);
+            padding: 0.75rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #333;
+        }
+
+        .hero-img-wrap {
+            height: 500px;
+            width: 100%;
+            background-color: #e5e3dd;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(110%);
+            transition: transform 1s ease-out;
+        }
+
+        .hero-img-wrap:hover .hero-img {
+            transform: scale(1.05);
+        }
+
+        /* --- SHOP SECTION --- */
+        .shop-section {
+            padding: 6rem 1.5rem;
+            max-width: 80rem;
+            margin: 0 auto;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .filter-group {
+            display: none; /* Mobile hidden */
+            gap: 1.5rem;
+        }
+
+        .filter-btn {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--txt-sub);
+            transition: all 0.2s;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+        }
+        .filter-btn:hover {
+            color: var(--txt-main);
+        }
+        .filter-btn.active {
+            color: var(--txt-main);
+            border-bottom-color: var(--txt-main);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem 2rem;
+        }
+
+        /* --- PRODUCT CARD --- */
+        .card {
+            cursor: pointer;
+            opacity: 0; /* Handled by JS animation */
+        }
+        /* Group hover logic in pure CSS */
+        .card:hover .card-img {
+            transform: scale(1.05);
+        }
+        .card:hover .add-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-img-box {
+            position: relative;
+            background-color: #e5e3dd;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            color: black;
+            font-size: 0.625rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 10;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .add-btn {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: white;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            
+            /* Hidden by default, shown on hover */
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .add-btn:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.025em;
+            color: var(--txt-main);
+        }
+
+        .card-price {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .card-cat {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-section {
+            background-color: white;
+            padding: 6rem 1.5rem;
+        }
+
+        .about-container {
+            max-width: 48rem;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .about-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--txt-sub);
+        }
+
+        .about-quote {
+            font-family: serif;
+            font-style: italic;
+            font-size: 2rem;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .about-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            max-width: 32rem;
+            margin: 0 auto;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: var(--bg-main);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 80rem;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .brand-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+            letter-spacing: -0.025em;
+        }
+
+        .footer-address {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links-group {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .link-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .col-title {
+            font-weight: 600;
+            color: black;
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-link:hover {
+            color: black;
+        }
+
+        .newsletter-wrap {
+            max-width: 16rem;
+        }
+        .newsletter-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+        .newsletter-input-box {
+            display: flex;
+            border-bottom: 1px solid black;
+            padding-bottom: 0.25rem;
+        }
+        .newsletter-input {
+            background: transparent;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 0.875rem;
+            color: var(--txt-main);
+        }
+        .join-btn {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .join-btn:hover {
+            color: #4b5563;
+        }
+
+        .footer-bottom {
+            max-width: 80rem;
+            margin: 4rem auto 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.625rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .team-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* --- MEDIA QUERIES (Responsive Design) --- */
+        
+        /* Tablet (md) */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+            .icon-btn.md-hidden { /* Hides menu button on desktop */
+                display: none;
+            }
+            .hero-title {
+                font-size: 4.5rem;
+            }
+            .hero-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .hero-content {
+                order: 1;
+            }
+            .hero-img-wrap {
+                order: 2;
+                height: 700px;
+            }
+            .filter-group {
+                display: flex;
+            }
+            .footer-grid {
+                grid-template-columns: 2fr 2fr 1fr; /* Custom grid for footer */
+            }
+        }
+
+        /* Desktop (lg) */
+        @media (min-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .about-quote {
+                font-size: 2.25rem;
+            }
+        }
+
+        /* Small mobile tweaks */
+        @media (max-width: 640px) {
+            .product-grid {
+                grid-template-columns: 1fr; /* 1 col on mobile */
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .team-list {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" style="z-index: 101;">
+                <!-- Make sure 'logo.jpg' exists in your folder -->
+                <img src="https://raw.githubusercontent.com/jaycarjcc-a11y/I-TechApparel/refs/heads/main/Brand%20Logo.png" alt="I-TECH Logo" class="logo-img">
+            </a>
+
+            <div class="nav-links">
+                <a href="#shop" class="nav-link">Shop</a>
+                <a href="#collections" class="nav-link">Collections</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+
+            <div class="nav-icons">
+                <button class="icon-btn">
+                    <i data-lucide="search" width="20" height="20"></i>
+                </button>
+                <button class="icon-btn">
+                    <i data-lucide="shopping-bag" width="20" height="20"></i>
+                    <span class="cart-badge"></span>
+                </button>
+                <button id="menu-btn" class="icon-btn md-hidden">
+                    <i data-lucide="menu" width="24" height="24"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="#shop" class="mobile-link">Shop</a>
+            <a href="#collections" class="mobile-link">Collections</a>
+            <a href="#about" class="mobile-link">About</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <span class="hero-subtitle">Information Technology Made Simple</span>
+                <h1 class="hero-title">Essential forms.<br/><span>IT style.</span></h1>
+                <p class="hero-desc">I-Tech apparel designed for simplicity and techy.</p>
+                <div style="padding-top: 1rem;">
+                    <a href="#shop" class="btn-primary">Shop Collection</a>
+                </div>
+            </div>
+            <div class="hero-img-wrap">
+                <img src="https://images.unsplash.com/photo-1504194921103-f8b80cadd5e4?auto=format&fit=crop&q=80&w=1000" alt="Hero Model" class="hero-img">
+            </div>
+        </div>
+    </header>
+
+    <!-- SHOP -->
+    <section id="shop" class="shop-section">
+        <div class="section-header">
+            <h2 class="section-title">Selected Items</h2>
+            <div class="filter-group" id="filters">
+                <button class="filter-btn active" data-filter="All">All</button>
+                <button class="filter-btn" data-filter="Heavy">Heavy</button>
+                <button class="filter-btn" data-filter="Slim">Slim</button>
+            </div>
+        </div>
+        
+        <!-- Grid Container -->
+        <div id="grid" class="product-grid"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <p class="about-label">IT World</p>
+            <h2 class="about-quote">"Compile your efforts, execute your dreams"</h2>
+            <p class="about-text">I-Tech Apparel delivers high-quality, thoughtfully crafted clothing at a price that stays practical and reasonable.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <span class="brand-name">I-TECH APPAREL</span>
+                <p class="footer-address">Cebu • UC-Main • UC-Jones</p>
+            </div>
+            
+            <div class="footer-links-group">
+                <div class="link-col">
+                    <span class="col-title">Shop</span>
+                    <a href="#" class="footer-link">New Arrivals</a>
+                    <a href="#" class="footer-link">Best Sellers</a>
+                </div>
+                <div class="link-col">
+                    <span class="col-title">Info</span>
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Shipping</a>
+                </div>
+            </div>
+            
+            <div class="newsletter-wrap">
+                <span class="newsletter-label">Wanna be part of us?</span>
+                <div class="newsletter-input-box">
+                    <input type="email" placeholder="Email Address" class="newsletter-input">
+                    <button class="join-btn">Join</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 I-TECH APPAREL</p>
+            <div class="team-list">
+                <a href="#">Jaycar</a>
+                <a href="#">Ivan</a>
+                <a href="#">Kyle</a>
+                <a href="#">Gian</a>
+                <a href="#">Dan</a>
+                <a href="#">Charles</a>
+                <a href="#">Darwin</a>
+                <a href="#">Gregg</a>
+                <a href="#">Jonathan</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // 1. Initialize Icons
+        lucide.createIcons();
+
+        // 2. Data
+        const data = [
+            
+            { id: 1, name: "Heavy Relaxed T-shirt (White)", price: 499.00, cat: "Heavy", img: "https://raw.githubusercontent.com/jaycarjcc-a11y/I-TechApparel/refs/heads/main/Clothing1.png", tag: "New" },
+            { id: 2, name: "Heavy Relaxed T-shirt (Black)", price: 499.00, cat: "Heavy", img: "https://raw.githubusercontent.com/jaycarjcc-a11y/I-TechApparel/refs/heads/main/Clothing2.png" },
+            { id: 3, name: "Slim Fit T-shirt (Brown)", price: 299.00, cat: "Slim", img: "https://raw.githubusercontent.com/jaycarjcc-a11y/I-TechApparel/refs/heads/main/Clothing3.png" },
+            { id: 4, name: "Slim Fit T-shirt (Dusty Olive)", price: 299.00, cat: "Slim", img: "https://raw.githubusercontent.com/jaycarjcc-a11y/I-TechApparel/refs/heads/main/Clothing4.png" },
+        ];
+
+        // 3. Select DOM Elements
+        const grid = document.getElementById('grid');
+        const filters = document.querySelectorAll('.filter-btn');
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // 4. Render Function
+        function render(cat = "All") {
+            grid.innerHTML = ''; 
+            const items = cat === "All" ? data : data.filter(i => i.cat === cat);
+
+            items.forEach((item, i) => {
+                const html = `
+                    <div class="card" style="animation: fadeIn 0.5s ease forwards ${i * 0.1}s">
+                        <div class="card-img-box">
+                            ${item.tag ? `<div class="card-tag">${item.tag}</div>` : ''}
+                            <img src="${item.img}" class="card-img">
+                            <button class="add-btn">
+                                <i data-lucide="plus" width="16" height="16"></i>
+                            </button>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-footer">
+                                <h3 class="card-title">${item.name}</h3>
+                                <span class="card-price">₱${item.price.toFixed(2)}</span>
+                            </div>
+                            <p class="card-cat">${item.cat}</p>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', html);
+            });
+            lucide.createIcons();
+        }
+
+        // 5. Filter Logic
+        filters.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filters.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                render(btn.dataset.filter);
+            });
+        });
+
+        // 6. Menu Logic (Simple Class Toggle)
+        let open = false;
+        menuBtn.addEventListener('click', () => {
+            open = !open;
+            
+            // Toggle the 'open' class on the menu
+            if (open) {
+                mobileMenu.classList.add('open');
+            } else {
+                mobileMenu.classList.remove('open');
+            }
+
+            // Update Icon
+            menuBtn.innerHTML = open 
+                ? '<i data-lucide="x" width="24" height="24"></i>' 
+                : '<i data-lucide="menu" width="24" height="24"></i>';
+            lucide.createIcons();
+        });
+
+        // Close menu when clicking links
+        document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+            open = false;
+            mobileMenu.classList.remove('open');
+            menuBtn.innerHTML = '<i data-lucide="menu" width="24" height="24"></i>';
+            lucide.createIcons();
+        }));
+
+        // Initial Render
+        render();
+    </script>
+</body>
+</html>
